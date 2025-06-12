@@ -23,7 +23,6 @@ const POS: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [customerName, setCustomerName] = useState("");
   const [customerEmail, setCustomerEmail] = useState("");
-  const [paymentMethod, setPaymentMethod] = useState("");
   const [amountPaid, setAmountPaid] = useState("");
   const [discount, setDiscount] = useState("");
   const [placingOrder, setPlacingOrder] = useState(false);

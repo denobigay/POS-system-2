@@ -21,7 +21,6 @@ const Receipt: React.FC<ReceiptProps> = ({
     total_amount,
     amount_paid,
     change_amount,
-    payment_method,
     created_at,
     discount,
   } = order;

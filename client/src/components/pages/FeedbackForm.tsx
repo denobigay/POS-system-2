@@ -11,7 +11,7 @@ const FeedbackForm: React.FC = () => {
 
   const [rating, setRating] = useState<number | null>(null);
   const [comment, setComment] = useState<string>("");
-  const [email, setEmail] = useState<string>("");
+  const [email] = useState<string>("");
   const [hover, setHover] = useState<number | null>(null);
   const [submitting, setSubmitting] = useState(false);
 
