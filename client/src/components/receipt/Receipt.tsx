@@ -1,4 +1,7 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import axios from "../../AxiosInstance";
+import jsPDF from "jspdf";
+import html2canvas from "html2canvas";
 
 interface ReceiptProps {
   order: any;
@@ -24,6 +27,21 @@ const Receipt: React.FC<ReceiptProps> = ({
     created_at,
     discount,
   } = order;
+
+  const handleDownloadPDF = async () => {
+    const input = document.getElementById("receipt-content");
+    if (!input) return;
+    const canvas = await html2canvas(input);
+    const imgData = canvas.toDataURL("image/png");
+    const pdf = new jsPDF({
+      orientation: "portrait",
+      unit: "px",
+      format: [canvas.width, canvas.height]
+    });
+    pdf.addImage(imgData, "PNG", 0, 0, canvas.width, canvas.height);
+    pdf.save(`receipt-${order.order_id || "order"}.pdf`);
+  };
+
   return (
     <div
       className="modal fade show d-block"
@@ -142,7 +160,7 @@ const Receipt: React.FC<ReceiptProps> = ({
             <button className="btn btn-primary" onClick={onPrint}>
               Print
             </button>
-            <button className="btn btn-success" onClick={onDownload}>
+            <button className="btn btn-success" onClick={handleDownloadPDF}>
               Download PDF
             </button>
           </div>

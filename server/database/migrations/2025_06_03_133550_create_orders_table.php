@@ -17,7 +17,7 @@ return new class extends Migration
             $table->decimal('total_amount', 10, 2);
             $table->decimal('amount_paid', 10, 2);
             $table->decimal('change_amount', 10, 2);
-            $table->string('payment_method', 55);
+            $table->string('payment_method', 55)->default('cash');
             $table->enum('status', ['completed', 'cancelled'])->default('completed');
             $table->timestamps();
 

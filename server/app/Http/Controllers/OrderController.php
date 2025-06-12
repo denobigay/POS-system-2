@@ -39,7 +39,7 @@ class OrderController extends Controller
                 'total_amount' => $request->total,
                 'amount_paid' => $request->amountPaid,
                 'change_amount' => $request->amountPaid - $request->total,
-                'payment_method' => $request->paymentMethod,
+                'payment_method' => 'cash',
                 'status' => 'completed',
                 'discount' => $request->discount,
             ]);

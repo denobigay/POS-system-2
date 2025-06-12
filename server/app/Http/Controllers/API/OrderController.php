@@ -76,6 +76,7 @@ class OrderController extends Controller
                 'total_amount' => $totalAfterDiscount,
                 'amount_paid' => $validated['amountPaid'],
                 'change_amount' => $validated['amountPaid'] - $totalAfterDiscount,
+                'payment_method' => 'cash',
                 'status' => 'completed',
                 'discount' => $discountPercent
             ]);

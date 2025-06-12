@@ -60,6 +60,7 @@ const Dashboard: React.FC = () => {
       data: [],
     },
   });
+  
 
   useEffect(() => {
     const fetchDashboardData = async () => {
