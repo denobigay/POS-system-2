@@ -116,7 +116,7 @@ export const orderService = {
           <body>
             <div class="receipt">
               <div class="header">
-                <div class="logo">SnackHub</div>
+                <div class="logo" style="color: #dc3545;">SnackHub</div>
                 <div>Receipt #${order_id}</div>
                 <div>${created_at ? new Date(created_at).toLocaleString() : new Date().toLocaleString()}</div>
                 ${user ? `<div>Cashier: ${user.name || user.username || user.user_name}</div>` : ''}

@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from "react";
-import axios from "../../AxiosInstance";
 import jsPDF from "jspdf";
 import html2canvas from "html2canvas";
+import { useRef } from "react";
+import { orderService } from "../../services/orderService";
 
 interface ReceiptProps {
   order: any;
@@ -13,8 +13,6 @@ interface ReceiptProps {
 const Receipt: React.FC<ReceiptProps> = ({
   order,
   onClose,
-  onPrint,
-  onDownload,
 }) => {
   if (!order) return null;
   const {
@@ -28,39 +26,82 @@ const Receipt: React.FC<ReceiptProps> = ({
     discount,
   } = order;
 
+  const receiptRef = useRef<HTMLDivElement>(null);
+  const handlePrint = () => {
+    orderService.printReceiptFromOrder(order);
+  };
+
   const handleDownloadPDF = async () => {
     const input = document.getElementById("receipt-content");
     if (!input) return;
-    const canvas = await html2canvas(input);
+    const canvas = await html2canvas(input, { scale: 2 });
     const imgData = canvas.toDataURL("image/png");
     const pdf = new jsPDF({
       orientation: "portrait",
       unit: "px",
-      format: [canvas.width, canvas.height]
+      format: [canvas.width, canvas.height],
     });
     pdf.addImage(imgData, "PNG", 0, 0, canvas.width, canvas.height);
-    pdf.save(`receipt-${order.order_id || "order"}.pdf`);
+    pdf.save(`receipt-${order_id || "order"}.pdf`);
   };
 
   return (
     <div
       className="modal fade show d-block"
       tabIndex={-1}
-      style={{ backgroundColor: "rgba(0,0,0,0.5)" }}
+      style={{
+        backgroundColor: "rgba(0,0,0,0.2)",
+        position: "fixed",
+        top: 0,
+        left: 0,
+        width: "100vw",
+        height: "100vh",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        zIndex: 1050
+      }}
     >
-      <div className="modal-dialog modal-lg">
-        <div className="modal-content bg-dark text-white">
-          <div className="modal-header">
+      <div className="modal-dialog" style={{ margin: 0, padding: 0, width: 'auto', maxWidth: 'unset', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+        <div
+          className="modal-content bg-dark text-white"
+          style={{
+            borderRadius: "16px",
+            boxShadow: "0 0 24px rgba(0,0,0,0.2)",
+            padding: "20px 0",
+            minWidth: 0,
+            width: "320px",
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center"
+          }}
+        >
+          <div
+            className="modal-header"
+            style={{
+              border: "none",
+              paddingBottom: 0,
+              paddingTop: 0,
+              paddingLeft: 0,
+              paddingRight: 0,
+              background: "transparent"
+            }}
+          >
             <h5 className="modal-title">Receipt</h5>
-            <button
-              type="button"
-              className="btn-close btn-close-white"
-              aria-label="Close"
-              onClick={onClose}
-            ></button>
           </div>
-          <div className="modal-body">
-            <div id="receipt-content">
+          <div className="modal-body" style={{ padding: 0, width: '100%', display: 'flex', justifyContent: 'center' }}>
+            <div
+              id="receipt-content"
+              ref={receiptRef}
+              style={{
+                width: "260px",
+                margin: "0 auto",
+                background: "#fff",
+                color: "#000",
+                padding: "12px",
+                borderRadius: "8px"
+              }}
+            >
               <div className="text-center mb-4">
                 <h4 className="text-danger fw-bold">SnackHub</h4>
                 <div>Receipt #{order_id}</div>
@@ -153,11 +194,11 @@ const Receipt: React.FC<ReceiptProps> = ({
               </div>
             </div>
           </div>
-          <div className="modal-footer">
+          <div className="modal-footer justify-content-center" style={{ borderTop: 'none' }}>
             <button className="btn btn-secondary" onClick={onClose}>
               Close
             </button>
-            <button className="btn btn-primary" onClick={onPrint}>
+            <button className="btn btn-primary mx-2" onClick={handlePrint}>
               Print
             </button>
             <button className="btn btn-success" onClick={handleDownloadPDF}>
